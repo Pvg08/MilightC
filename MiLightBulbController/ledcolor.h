@@ -6,22 +6,22 @@ namespace MiLED
     class LEDColor
     {
         public:
-            const unsigned char Violet = 0X00;
-            const unsigned char RoyalBlue = 0X10;
-            const unsigned char BabyBlue = 0X20;
-            const unsigned char Aqua = 0X30;
-            const unsigned char Mint = 0X40;
-            const unsigned char SeafoamGreen = 0X50;
-            const unsigned char Green = 0X60;
-            const unsigned char LimeGreen = 0X70;
-            const unsigned char Yellow = 0X80;
-            const unsigned char YellowOrange = 0X90;
-            const unsigned char Orange = 0XA0;
-            const unsigned char Red = 0XB0;
-            const unsigned char Pink = 0XC0;
-            const unsigned char Fusia = 0XD0;
-            const unsigned char Lilac = 0XE0;
-            const unsigned char Lavendar = 0XF0;
+            const quint8 Violet = 0X00;
+            const quint8 RoyalBlue = 0X10;
+            const quint8 BabyBlue = 0X20;
+            const quint8 Aqua = 0X30;
+            const quint8 Mint = 0X40;
+            const quint8 SeafoamGreen = 0X50;
+            const quint8 Green = 0X60;
+            const quint8 LimeGreen = 0X70;
+            const quint8 Yellow = 0X80;
+            const quint8 YellowOrange = 0X90;
+            const quint8 Orange = 0XA0;
+            const quint8 Red = 0XB0;
+            const quint8 Pink = 0XC0;
+            const quint8 Fusia = 0XD0;
+            const quint8 Lilac = 0XE0;
+            const quint8 Lavendar = 0XF0;
     };
 }
 

@@ -23,10 +23,10 @@ LEDClient::LEDClient(QString outHost, QString outService, QString inHost, QStrin
 
 void LEDClient::SendData(QByteArray data)
 {
-    /*QTextStream console(stdout);
+    QTextStream console(stdout);
     console << data.size() << " ";
     console << data.toHex() << " - ";
-    console <<  QHostAddress(_outHost).toString() << " " << _outService.toLong() << endl;*/
+    console <<  QHostAddress(_outHost).toString() << " " << _outService << endl;
 
     QByteArray msg;
     msg.append(data);
