@@ -84,3 +84,13 @@ void MainWindow::on_toolButton_resend_clicked()
 {
     getLedbridge()->RepeatLastCommand();
 }
+
+void MainWindow::on_pushButton_fup_clicked()
+{
+    getLedbridge()->FadeUp(100);
+}
+
+void MainWindow::on_pushButton_fdown_clicked()
+{
+    getLedbridge()->FadeDown(100);
+}

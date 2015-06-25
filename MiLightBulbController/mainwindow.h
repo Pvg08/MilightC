@@ -42,6 +42,10 @@ private slots:
 
     void on_toolButton_resend_clicked();
 
+    void on_pushButton_fup_clicked();
+
+    void on_pushButton_fdown_clicked();
+
 private:
     Ui::MainWindow *ui;
     LEDBridge *led_bridge;

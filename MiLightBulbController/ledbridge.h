@@ -23,8 +23,10 @@ namespace MiLED
     class LEDBridge
     {
     private:
-        CancellationToken *ct;
-        QString _hostName = "";
+            CancellationToken *ct;
+            QString _hostName = "";
+
+            bool fadeMode = false;
             QColor lastcolor;
             QByteArray lastCommand;
             QString _serviceName = "";
@@ -52,6 +54,7 @@ namespace MiLED
             void whiteAllOn();
             void whiteAllOff();
             void rgbwSendOnToActiveGroup();
+            void rgbwSendOffToActiveGroup();
             void whiteSendOnToActiveGroup();
             void rgbwBrightnessPercent(quint8 brightnessPercent);
             void rgbwSetColor(quint8 colorID);
@@ -59,6 +62,8 @@ namespace MiLED
 
             void rgbwAllSetToWhite();
             void StrobeMode(quint16 interval);
+            void FadeDown(quint16 delay);
+            void FadeUp(quint16 delay);
             void rgbwDiscoMode();
             void rgbwDiscoSlower();
             void rgbwDiscoFaster();
