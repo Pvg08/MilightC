@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QColor>
-#include "./ledgroups.h"
 #include "./ledcolor.h"
 #include "./ledcommands.h"
 #include "./ledclient.h"
@@ -26,6 +25,8 @@ namespace MiLED
     private:
         CancellationToken *ct;
         QString _hostName = "";
+            QColor lastcolor;
+            QByteArray lastCommand;
             QString _serviceName = "";
             LEDClient *_client = 0;
             quint8 rgbwActiveGroup = 0;
@@ -35,7 +36,6 @@ namespace MiLED
         public:
             LEDCommands Commands;
             LEDColor Colors;
-            LEDGroups Groups;
 
             LEDBridge();
             LEDBridge(QString hostName, QString serviceName);
@@ -45,6 +45,7 @@ namespace MiLED
             void setServiceName(const QString &serviceName);
 
             void SendCommand(QByteArray buffer);
+            void RepeatLastCommand();
 
             void rgbwAllOn();
             void rgbwAllOff();
@@ -55,11 +56,16 @@ namespace MiLED
             void rgbwBrightnessPercent(quint8 brightnessPercent);
             void rgbwSetColor(quint8 colorID);
             void rgbwSetColor(QString hexColor);
+
             void rgbwAllSetToWhite();
             void StrobeMode(quint16 interval);
+            void rgbwDiscoMode();
+            void rgbwDiscoSlower();
+            void rgbwDiscoFaster();
 
             void Stop();
 
+            QColor getLastcolor() const;
     };
 }
 

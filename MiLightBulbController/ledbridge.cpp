@@ -28,7 +28,13 @@ void LEDBridge::SendCommand(QByteArray buffer)
     {
         _client = new LEDClient(_hostName, _serviceName);
     }
+    lastCommand = buffer;
     _client->SendData(buffer);
+}
+
+void LEDBridge::RepeatLastCommand()
+{
+    if (_client) _client->SendData(lastCommand);
 }
 
 void LEDBridge::rgbwAllOn()
@@ -199,6 +205,24 @@ void LEDBridge::StrobeMode(quint16 interval = 1000)
     }
 }
 
+void LEDBridge::rgbwDiscoMode()
+{
+    rgbwSendOnToActiveGroup();
+    SendCommand(QByteArray::fromHex(Commands.RGBWDiscoMode));
+}
+
+void LEDBridge::rgbwDiscoSlower()
+{
+    rgbwSendOnToActiveGroup();
+    SendCommand(QByteArray::fromHex(Commands.RGBWDiscoSpeedSlower));
+}
+
+void LEDBridge::rgbwDiscoFaster()
+{
+    rgbwSendOnToActiveGroup();
+    SendCommand(QByteArray::fromHex(Commands.RGBWDiscoSpeedFaster));
+}
+
 void LEDBridge::Stop()
 {
     if (ct == 0) {
@@ -207,6 +231,11 @@ void LEDBridge::Stop()
     ct->setIsCancellationRequested(true);
 }
 
+
+QColor LEDBridge::getLastcolor() const
+{
+    return lastcolor;
+}
 void LEDBridge::Delay(int millisecondsTimeout = 101)
 {
     if (millisecondsTimeout > 0)
@@ -222,6 +251,7 @@ void LEDBridge::Delay(int millisecondsTimeout = 101)
 quint8 LEDBridge::hexToMilightColor(QString hexColor)
 {
     QColor col = QColor(hexColor);
+    lastcolor = col;
     col = col.toHsl();
     quint8 color = (256 + 176 - (int)(col.hslHue() / 360.0 * 255.0)) % 256;
     return (color + 0xfa) % 256;
@@ -230,6 +260,8 @@ quint8 LEDBridge::hexToMilightColor(QString hexColor)
 LEDBridge::LEDBridge()
 {
     _client = 0;
+    lastcolor = QColor("#ffffff");
+    lastCommand.clear();
 }
 
 LEDBridge::LEDBridge(QString hostName, QString serviceName)
@@ -237,6 +269,8 @@ LEDBridge::LEDBridge(QString hostName, QString serviceName)
     _client = 0;
     _hostName = hostName;
     _serviceName = serviceName;
+    lastcolor = QColor("#ffffff");
+    lastCommand.clear();
 }
 
 

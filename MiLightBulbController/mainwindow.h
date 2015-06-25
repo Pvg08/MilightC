@@ -23,13 +23,24 @@ public:
 
 private slots:
     void on_pushButton_on_clicked();
-    void on_pushButton_off_clicked();
 
     void on_pushButton_white_clicked();
 
     void on_horizontalSlider_brightness_sliderReleased();
 
     void on_pushButton_color_clicked();
+
+    void on_pushButton_disco_clicked();
+
+    void on_pushButton_faster_clicked();
+
+    void on_pushButton_slower_clicked();
+
+    void on_lineEdit_host_editingFinished();
+
+    void on_lineEdit_port_editingFinished();
+
+    void on_toolButton_resend_clicked();
 
 private:
     Ui::MainWindow *ui;

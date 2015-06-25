@@ -20,7 +20,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     ledcolor.h \
     ledcommands.h \
-    ledgroups.h \
     ledclient.h \
     ledbridge.h
 
