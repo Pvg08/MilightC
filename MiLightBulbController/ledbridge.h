@@ -7,71 +7,76 @@
 #include "./ledcommands.h"
 #include "./ledclient.h"
 
-namespace MiLED
+class CancellationToken
 {
-    class CancellationToken
-    {
-        public:
-            bool CanBeCanceled = true;
-            bool IsCancellationRequested = false;
-            bool getCanBeCanceled() const;
-            void setCanBeCanceled(bool value);
-            bool getIsCancellationRequested() const;
-            void setIsCancellationRequested(bool value);
-    };
-
-    class LEDBridge
-    {
     private:
-            CancellationToken *ct;
-            QString _hostName = "";
+        bool CanBeCanceled = true;
+        bool IsCancellationRequested = false;
+    public:
+        bool getCanBeCanceled() const;
+        void setCanBeCanceled(bool value);
+        bool getIsCancellationRequested() const;
+        void setIsCancellationRequested(bool value);
+};
 
-            bool fadeMode = false;
-            QColor lastcolor;
-            QByteArray lastCommand;
-            QString _serviceName = "";
-            LEDClient *_client = 0;
-            quint8 rgbwActiveGroup = 0;
-            void Delay(int millisecondsTimeout);
+class LEDBridge : public QObject
+{
+    Q_OBJECT
+    private:
+        CancellationToken *ct;
+        QString _hostName = "";
 
-            quint8 hexToMilightColor(QString hexColor);
-        public:
-            LEDCommands Commands;
-            LEDColor Colors;
+        bool fadeMode = false;
+        QColor lastcolor;
+        QByteArray lastCommand;
+        QString _serviceName = "";
+        LEDClient *_client = 0;
+        quint8 rgbwActiveGroup = 0;
+        void Delay(int millisecondsTimeout);
 
-            LEDBridge();
-            LEDBridge(QString hostName, QString serviceName);
-            QString hostName() const;
-            void setHostName(const QString &hostName);
-            QString serviceName() const;
-            void setServiceName(const QString &serviceName);
+        quint8 hexToMilightColor(QString hexColor);
+    public:
+        LEDCommands Commands;
+        LEDColor Colors;
 
-            void SendCommand(QByteArray buffer);
-            void RepeatLastCommand();
+        LEDBridge();
+        LEDBridge(QString hostName, QString serviceName);
+        QString hostName() const;
+        void setHostName(const QString &hostName);
+        QString serviceName() const;
+        void setServiceName(const QString &serviceName);
 
-            void rgbwAllOn();
-            void rgbwAllOff();
-            void whiteAllOn();
-            void whiteAllOff();
-            void rgbwSendOnToActiveGroup();
-            void rgbwSendOffToActiveGroup();
-            void whiteSendOnToActiveGroup();
-            void rgbwBrightnessPercent(quint8 brightnessPercent);
-            void rgbwSetColor(quint8 colorID);
-            void rgbwSetColor(QString hexColor);
+        void SendCommand(QByteArray buffer);
+        void RepeatLastCommand();
 
-            void rgbwAllSetToWhite();
-            void StrobeMode(quint16 interval);
-            void FadeDown(quint16 delay);
-            void FadeUp(quint16 delay);
-            void rgbwDiscoMode();
-            void rgbwDiscoSlower();
-            void rgbwDiscoFaster();
+        void rgbwAllOn();
+        void rgbwAllOff();
+        void whiteAllOn();
+        void whiteAllOff();
+        void rgbwSendOnToActiveGroup();
+        void rgbwSendOffToActiveGroup();
+        void whiteSendOnToActiveGroup();
+        void rgbwBrightnessPercent(quint8 brightnessPercent);
+        void rgbwSetColor(quint8 colorID);
+        void rgbwSetColor(QString hexColor);
 
-            void Stop();
+        void rgbwAllSetToWhite();
+        void StrobeMode(quint16 interval);
+        void FadeDown(quint16 delay);
+        void FadeUp(quint16 delay);
+        void rgbwDiscoMode();
+        void rgbwDiscoSlower();
+        void rgbwDiscoFaster();
 
-            QColor getLastcolor() const;
-    };
-}
+        void Start();
+        void Stop();
+
+        QColor getLastcolor() const;
+        quint8 getRgbwActiveGroup() const;
+        void setRgbwActiveGroup(const quint8 &value);
+    signals:
+        void command_sended(QByteArray command);
+};
+
 
 #endif // LEDBRIDGE_H

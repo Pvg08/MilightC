@@ -9,8 +9,6 @@ namespace Ui {
 class MainWindow;
 }
 
-using namespace MiLED;
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -46,6 +44,11 @@ private slots:
 
     void on_pushButton_fdown_clicked();
 
+    void on_pushButton_stop_clicked();
+
+    void on_pushButton_strobe_clicked();
+
+    void led_command(QByteArray command);
 private:
     Ui::MainWindow *ui;
     LEDBridge *led_bridge;

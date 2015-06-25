@@ -8,24 +8,21 @@
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QUdpSocket>
 
-namespace MiLED
+class LEDClient
 {
-    class LEDClient
-    {
-        private:
-            QHostAddress _inHost;
-            QHostAddress _outHost;
-            quint16 _inService;
-            quint16 _outService;
-        public:
-            static const QString DefaultOutHost;
-            static const QString DefaultOutService;
+    private:
+        QHostAddress _inHost;
+        QHostAddress _outHost;
+        quint16 _inService;
+        quint16 _outService;
+    public:
+        static const QString DefaultOutHost;
+        static const QString DefaultOutService;
 
-            LEDClient(QString outHost, QString outService);
-            LEDClient(QString outHost, QString outService, QString inHost, QString inService);
-            void SendData(QByteArray data);
-            void Delay(long int duration);
-    };
-}
+        LEDClient(QString outHost, QString outService);
+        LEDClient(QString outHost, QString outService, QString inHost, QString inService);
+        void SendData(QByteArray data);
+        void Delay(long int duration);
+};
 
 #endif // LEDCLIENT_H

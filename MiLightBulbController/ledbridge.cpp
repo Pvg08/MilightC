@@ -1,7 +1,5 @@
 #include "ledbridge.h"
 
-using namespace MiLED;
-
 QString LEDBridge::hostName() const
 {
     return _hostName;
@@ -30,11 +28,15 @@ void LEDBridge::SendCommand(QByteArray buffer)
     }
     lastCommand = buffer;
     _client->SendData(buffer);
+    emit command_sended(buffer);
 }
 
 void LEDBridge::RepeatLastCommand()
 {
-    if (_client) _client->SendData(lastCommand);
+    if (_client) {
+        _client->SendData(lastCommand);
+        emit command_sended(lastCommand);
+    }
 }
 
 void LEDBridge::rgbwAllOn()
@@ -135,7 +137,7 @@ void LEDBridge::StrobeMode(quint16 interval = 1000)
     QByteArray byteOff = QByteArray::fromHex(Commands.RGBWOff);
     QByteArray byteOn = QByteArray::fromHex(Commands.RGBWOn);
 
-    while ((ct == 0) || ((ct != 0) && (ct->CanBeCanceled) && (ct->IsCancellationRequested)))
+    while (!ct || !(ct->getCanBeCanceled() && ct->getIsCancellationRequested()))
     {
         SendCommand(byteOff);
         Delay(interval);
@@ -148,12 +150,12 @@ void LEDBridge::FadeDown(quint16 delay = 100)
 {
     for (int i = 100; i >= 4; i-=4)
     {
-        if ((ct) && (ct->CanBeCanceled) && (ct->IsCancellationRequested)) break;
+        if (ct && ct->getCanBeCanceled() && ct->getIsCancellationRequested()) break;
         rgbwBrightnessPercent(i);
         Delay(delay);
         fadeMode = true;
     }
-    rgbwBrightnessPercent(0);
+    if (!(ct && ct->getCanBeCanceled() && ct->getIsCancellationRequested())) rgbwBrightnessPercent(0);
     fadeMode = false;
 }
 
@@ -162,7 +164,7 @@ void LEDBridge::FadeUp(quint16 delay = 100)
     rgbwBrightnessPercent(0);
     for (int i = 2; i < 100; i+=4)
     {
-        if ((ct) && (ct->CanBeCanceled) && (ct->IsCancellationRequested)) break;
+        if (ct && ct->getCanBeCanceled() && ct->getIsCancellationRequested()) break;
         Delay(delay);
         fadeMode = true;
         rgbwBrightnessPercent(i);
@@ -188,10 +190,20 @@ void LEDBridge::rgbwDiscoFaster()
     SendCommand(QByteArray::fromHex(Commands.RGBWDiscoSpeedFaster));
 }
 
+void LEDBridge::Start()
+{
+    if (!ct) {
+        ct = new CancellationToken();
+        ct->setCanBeCanceled(true);
+    }
+    ct->setIsCancellationRequested(false);
+}
+
 void LEDBridge::Stop()
 {
-    if (ct == 0) {
+    if (!ct) {
         ct = new CancellationToken();
+        ct->setCanBeCanceled(true);
     }
     ct->setIsCancellationRequested(true);
 }
@@ -202,6 +214,16 @@ QColor LEDBridge::getLastcolor() const
     return lastcolor;
 }
 
+
+quint8 LEDBridge::getRgbwActiveGroup() const
+{
+    return rgbwActiveGroup;
+}
+
+void LEDBridge::setRgbwActiveGroup(const quint8 &value)
+{
+    rgbwActiveGroup = value;
+}
 void LEDBridge::Delay(int millisecondsTimeout = 101)
 {
     if (millisecondsTimeout > 0)

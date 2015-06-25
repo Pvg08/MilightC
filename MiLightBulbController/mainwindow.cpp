@@ -18,6 +18,8 @@ LEDBridge *MainWindow::getLedbridge()
 {
     if (!led_bridge) {
         led_bridge = new LEDBridge(ui->lineEdit_host->text(), ui->lineEdit_port->text());
+        led_bridge->Start();
+        QObject::connect(led_bridge,SIGNAL(command_sended(QByteArray)),this,SLOT(led_command(QByteArray)));
     }
     ui->toolButton_resend->setEnabled(true);
     return led_bridge;
@@ -87,10 +89,28 @@ void MainWindow::on_toolButton_resend_clicked()
 
 void MainWindow::on_pushButton_fup_clicked()
 {
-    getLedbridge()->FadeUp(100);
+    getLedbridge()->Start();
+    getLedbridge()->FadeUp(400);
 }
 
 void MainWindow::on_pushButton_fdown_clicked()
 {
-    getLedbridge()->FadeDown(100);
+    getLedbridge()->Start();
+    getLedbridge()->FadeDown(400);
+}
+
+void MainWindow::on_pushButton_stop_clicked()
+{
+    getLedbridge()->Stop();
+}
+
+void MainWindow::on_pushButton_strobe_clicked()
+{
+    getLedbridge()->Start();
+    getLedbridge()->StrobeMode(1000);
+}
+
+void MainWindow::led_command(QByteArray command)
+{
+    ui->statusBar->showMessage("Send "+command.toHex()+" to "+getLedbridge()->hostName()+":"+getLedbridge()->serviceName(), 5000);
 }
